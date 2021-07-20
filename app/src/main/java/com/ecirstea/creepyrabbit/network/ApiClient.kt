@@ -5,7 +5,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-const val BASEURL = "http://localhost:9100/"
+const val BASEURL = "http://10.0.2.2:9100/"
 
 class ApiClient {
     companion object{
@@ -23,7 +23,7 @@ class ApiClient {
             if (retrofit == null) {
                 retrofit = Retrofit.Builder()
                     .baseUrl(BASEURL)
-                    .client(okHttpClient)
+               //     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()
             }

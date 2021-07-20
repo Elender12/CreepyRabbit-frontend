@@ -1,2 +1,3 @@
 rootProject.name = "CreepyRabbit"
 include ':app'
+include ':api'

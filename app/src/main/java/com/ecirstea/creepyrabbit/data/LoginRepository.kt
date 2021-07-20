@@ -1,16 +1,16 @@
 package com.ecirstea.creepyrabbit.data
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ecirstea.creepyrabbit.data.model.LoggedInUser
+import com.ecirstea.api.UsersApi
+import com.ecirstea.api.model.JwtRequest
+import com.ecirstea.api.model.JwtResponse
 import com.ecirstea.creepyrabbit.data.model.UserCredentials
-import com.ecirstea.creepyrabbit.data.model.UserToken
-import com.ecirstea.creepyrabbit.network.ApiClient
-import com.ecirstea.creepyrabbit.network.ApiInterface
+import com.ecirstea.creepyrabbit.network.CRApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -20,10 +20,11 @@ import retrofit2.Response
 //class LoginRepository(val dataSource: LoginDataSource) {
 private const val TAG = "LoginRepository"
 class LoginRepository() {
-    private var apiInterface: ApiInterface?=null
+    private var apiInterface: UsersApi?=null
 
     init {
-        apiInterface = ApiClient.getApiClient().create(ApiInterface::class.java)
+        apiInterface = CRApiClient.client.createService(UsersApi::class.java)
+        //CRApiClient.client.setBearerToken()
     }
 
    /* fun fetchAllPosts():LiveData<List<PostModel>>{
@@ -54,19 +55,20 @@ class LoginRepository() {
 
     }*/
 
-    fun authenticateUser(userCredentials: UserCredentials): MutableLiveData<UserToken?> {
-        val data = MutableLiveData<UserToken?>()
+    fun authenticateUser(userCredentials: UserCredentials): MutableLiveData<JwtResponse?> {
+        val data = MutableLiveData<JwtResponse?>()
         Log.d(TAG, "authenticateUser: +")
-        apiInterface?.createPost(userCredentials)?.enqueue(object : Callback<UserToken> {
-            override fun onFailure(call: Call<UserToken>, t: Throwable) {
+       apiInterface?.authenticate(JwtRequest().username(userCredentials.username).password(userCredentials.password))?.enqueue(object : Callback<JwtResponse> {
+            override fun onFailure(call: Call<JwtResponse>, t: Throwable) {
                 Log.d(TAG, "onFailure: ?")
                 data.value = null
             }
-
-            override fun onResponse(call: Call<UserToken>, response: Response<UserToken>) {
+            override fun onResponse(call: Call<JwtResponse>, response: Response<JwtResponse>) {
                 val res = response.body()
-                Log.d(TAG, "onResponse: before if")
-                if (response.code() == 201 && res!=null){
+
+                    Log.d(TAG, "onResponse: before if"+res)
+
+                if (response.code() == 200 && res!=null){
                     data.value = res
                     Log.d(TAG, "onResponse: $res")
                 }else{
@@ -78,6 +80,8 @@ class LoginRepository() {
         return data
 
     }
+
+
 
 /*    fun deletePost(id:Int):LiveData<Boolean>{
         val data = MutableLiveData<Boolean>()
@@ -141,3 +145,7 @@ class LoginRepository() {
         // @see https://developer.android.com/training/articles/keystore
     }*/
 }
+
+
+
+

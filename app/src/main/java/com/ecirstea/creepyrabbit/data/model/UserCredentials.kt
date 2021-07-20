@@ -1,6 +1,6 @@
 package com.ecirstea.creepyrabbit.data.model
 
 data class UserCredentials(
-    val email: String,
+    val username: String,
     val password: String
 )

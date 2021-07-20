@@ -8,7 +8,7 @@ import android.util.Patterns
 import com.ecirstea.creepyrabbit.data.LoginRepository
 import com.ecirstea.creepyrabbit.R
 import com.ecirstea.creepyrabbit.data.model.UserCredentials
-import com.ecirstea.creepyrabbit.data.model.UserToken
+import com.ecirstea.creepyrabbit.data.model.JwtResponse
 
 private const val TAG = "LoginViewModel"
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
@@ -16,7 +16,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
     var userCredentialsListLiveData : LiveData<List<UserCredentials>>?=null
-    var authenticateUserLiveData:LiveData<UserToken?>?=null
+    var authenticateUserLiveData:LiveData<JwtResponse?>?=null
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
@@ -25,14 +25,14 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         // can be launched in a separate asynchronous job
         //val result = loginRepository.login(username, password)
         val userCredentials = UserCredentials(username, password)
-        authenticateUserLiveData = loginRepository.authenticateUser(userCredentials)
-        Log.d(TAG, "login: ${authenticateUserLiveData.toString()}")
+        val result = loginRepository.authenticateUser(userCredentials)
+        Log.d(TAG, "login: $result")
 
-     /*   if (result is Result.Success) {
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+        if (result is com.ecirstea.api.model.JwtResponse) {
+            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = "elena"))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
-        } */
+        }
     }
 
     fun loginDataChanged(username: String, password: String) {

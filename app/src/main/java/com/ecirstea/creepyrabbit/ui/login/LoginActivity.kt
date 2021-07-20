@@ -9,6 +9,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -17,7 +18,7 @@ import com.ecirstea.creepyrabbit.databinding.ActivityLoginBinding
 
 import com.ecirstea.creepyrabbit.R
 import com.ecirstea.creepyrabbit.ui.home.HomeActivity
-
+private const val TAG = "LoginActivity"
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
@@ -58,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
             }
-            if (loginResult.success != null) {
+   /*         if (loginResult.success != null) {
                // call to home screen
                 val intent = Intent(this, HomeActivity::class.java).apply {
                     //putExtra(EXTRA_MESSAGE, message)
@@ -66,7 +67,13 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
 
                 //updateUiWithUser(loginResult.success)
+            }*/
+            // call to home screen
+            val intent = Intent(this, HomeActivity::class.java).apply {
+                //putExtra(EXTRA_MESSAGE, message)
             }
+            startActivity(intent)
+
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
