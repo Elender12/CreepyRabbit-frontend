@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import com.ecirstea.creepyrabbit.R
 import com.ecirstea.creepyrabbit.databinding.ActivityHomeBinding
+import com.ecirstea.creepyrabbit.network.CRApiClient
 
 private const val TAG = "HomeActivity"
 
@@ -20,6 +21,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.textTEST.text = resources.getString(R.string.myName)
         Log.d(TAG, "onCreate: +")
+
 
 
     }

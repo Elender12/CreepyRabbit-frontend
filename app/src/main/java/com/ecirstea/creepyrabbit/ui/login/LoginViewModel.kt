@@ -5,10 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
+import androidx.lifecycle.liveData
 import com.ecirstea.creepyrabbit.data.LoginRepository
 import com.ecirstea.creepyrabbit.R
 import com.ecirstea.creepyrabbit.data.model.UserCredentials
-import com.ecirstea.creepyrabbit.data.model.JwtResponse
+import kotlinx.coroutines.Dispatchers
 
 private const val TAG = "LoginViewModel"
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
@@ -16,23 +17,31 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
     var userCredentialsListLiveData : LiveData<List<UserCredentials>>?=null
-    var authenticateUserLiveData:LiveData<JwtResponse?>?=null
+  //  var authenticateUserLiveData:LiveData<JwtResponse?>?=null
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
-        //val result = loginRepository.login(username, password)
+       // val result = loginRepository.login(username, password)
         val userCredentials = UserCredentials(username, password)
-        val result = loginRepository.authenticateUser(userCredentials)
-        Log.d(TAG, "login: $result")
+     //   var result: MutableLiveData<JwtResponse?>
+        //val result = loginRepository.authenticateUser(userCredentials)
+        val firstTodo = liveData(Dispatchers.IO) {
+            val retrivedTodo = loginRepository.login(username, password)
+            Log.d(TAG, "login retrieved:: "+retrivedTodo)
 
-        if (result is com.ecirstea.api.model.JwtResponse) {
+            emit(retrivedTodo)
+        }
+        Log.d(TAG, "login: ${firstTodo.value}")
+      //  Log.d(TAG, "login: result "+result)
+    /*    if (result is Result.Success) {
             _loginResult.value = LoginResult(success = LoggedInUserView(displayName = "elena"))
+            Log.d(TAG, "login: ??????????")
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
-        }
+        }*/
     }
 
     fun loginDataChanged(username: String, password: String) {

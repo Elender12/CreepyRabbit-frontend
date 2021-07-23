@@ -1,18 +1,32 @@
 package com.ecirstea.creepyrabbit.data
 
-import com.ecirstea.creepyrabbit.data.model.LoggedInUser
+import com.ecirstea.api.UsersApi
+import com.ecirstea.api.model.JwtRequest
+import com.ecirstea.api.model.JwtResponse
+import com.ecirstea.creepyrabbit.network.CRApiClient
+import retrofit2.Call
 import java.io.IOException
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 class LoginDataSource {
+    private var apiInterface: UsersApi?=null
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    init {
+        apiInterface = CRApiClient.client.createService(UsersApi::class.java)
+    }
+    fun login(username: String, password: String): Call<JwtResponse>? {
         try {
-            // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
+
+       //   val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString())
+          val result =  apiInterface?.authenticate(JwtRequest().username(username).password(password))
+
+
+
+
+          return result
+
         } catch (e: Throwable) {
             return Result.Error(IOException("Error logging in", e))
         }

@@ -59,25 +59,26 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult.error != null) {
                 showLoginFailed(loginResult.error)
             }
-   /*         if (loginResult.success != null) {
+            if (loginResult.success != null) {
                // call to home screen
                 val intent = Intent(this, HomeActivity::class.java).apply {
                     //putExtra(EXTRA_MESSAGE, message)
                 }
+                updateUiWithUser(loginResult.success)
                 startActivity(intent)
 
-                //updateUiWithUser(loginResult.success)
-            }*/
-            // call to home screen
-            val intent = Intent(this, HomeActivity::class.java).apply {
-                //putExtra(EXTRA_MESSAGE, message)
+
             }
-            startActivity(intent)
+            // call to home screen
+          //  val intent = Intent(this, HomeActivity::class.java).apply {
+                //putExtra(EXTRA_MESSAGE, message)
+           // }
+           // startActivity(intent)
 
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
-            finish()
+           // finish()
         })
 
         username.afterTextChanged {
